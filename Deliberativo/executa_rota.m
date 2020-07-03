@@ -29,7 +29,7 @@ function [] = executa_rota()
     
     velo_frente=70;
     velo_gira=45;
-    distancia=800;
+    distancia=850;
     %ditancia=1050;
     angulo=1100;
     %angulo=550;
@@ -58,8 +58,8 @@ function [] = executa_rota()
     image(mapa_marc);
     pause(2);
   
-    % mBC=NXTMotor('BC', 'Power', velo_frente, 'TachoLimit', distancia);
-    motorBC=NXTMotor('BC', 'Power', velo_frente);
+    mBC=NXTMotor('BC', 'Power', velo_frente, 'TachoLimit', distancia);
+    %motorBC=NXTMotor('BC', 'Power', velo_frente);
 
     dir=1; %orientação inicia oeste -> leste;
 
@@ -78,31 +78,19 @@ function [] = executa_rota()
                             %------------------------------------------------------
                              mC=NXTMotor('C', 'Power',-velo_gira, 'TachoLimit',2*angulo);
                              mB=NXTMotor('B', 'Power',velo_gira, 'TachoLimit',2*angulo);
-                             mB.SendToNXT(h);
+                             mB.SendToNXT(h);            
                              mC.SendToNXT(h);
-                             mB.WaitFor(10, h); 
+                             mB.WaitFor(10, h);                              
                              mC.WaitFor(10, h);        
-                             mB.Stop('brake', h);
-                             mC.Stop('brake', h);
+                             StopMotor('all', 'off', h);
+                             
+                             NXC_ResetErrorCorrection(MOTOR_B, h);
+                             NXC_ResetErrorCorrection(MOTOR_C, h);
                            %-------------------------------------------------------
                         case 3
                             % gira 90º para o leste 
                             disp('altera direção atual norte->sul para oeste->leste');
                             dir=1; %atualiza direção atual
-                            %------------------------------------------------------
-                             mC=NXTMotor('C', 'Power',velo_gira, 'TachoLimit',angulo);
-                             mB=NXTMotor('B', 'Power',-velo_gira, 'TachoLimit',angulo);
-                             mB.SendToNXT(h);
-                             mC.SendToNXT(h);
-                             mB.WaitFor(10, h); 
-                             mC.WaitFor(10, h);        
-                             mB.Stop('brake', h);
-                             mC.Stop('brake', h);
-                            %------------------------------------------------------
-                        case 4
-                            % gira 90º para o oeste 
-                            disp('altera direção atual sul->norte para oeste->leste');
-                            dir=1; %atualiza direnção atual
                             %------------------------------------------------------
                              mC=NXTMotor('C', 'Power',-velo_gira, 'TachoLimit',angulo);
                              mB=NXTMotor('B', 'Power',velo_gira, 'TachoLimit',angulo);
@@ -110,8 +98,26 @@ function [] = executa_rota()
                              mC.SendToNXT(h);
                              mB.WaitFor(10, h); 
                              mC.WaitFor(10, h);        
-                             mB.Stop('brake', h);
-                             mC.Stop('brake', h);
+                             StopMotor('all', 'off', h);
+                             
+                             NXC_ResetErrorCorrection(MOTOR_B, h);
+                             NXC_ResetErrorCorrection(MOTOR_C, h);
+                            %------------------------------------------------------
+                        case 4
+                            % gira 90º para o oeste 
+                            disp('altera direção atual sul->norte para oeste->leste');
+                            dir=1; %atualiza direnção atual
+                            %------------------------------------------------------
+                             mC=NXTMotor('C', 'Power',velo_gira, 'TachoLimit',angulo);
+                             mB=NXTMotor('B', 'Power',-velo_gira, 'TachoLimit',angulo+100);
+                             mB.SendToNXT(h);
+                             mC.SendToNXT(h);
+                             mB.WaitFor(10, h); 
+                             mC.WaitFor(10, h);        
+                             StopMotor('all', 'off', h);
+                             
+                             NXC_ResetErrorCorrection(MOTOR_B, h);
+                             NXC_ResetErrorCorrection(MOTOR_C, h);
                            %-------------------------------------------------------
                             
                     end
@@ -182,8 +188,10 @@ function [] = executa_rota()
                              mC.SendToNXT(h);
                              mB.WaitFor(10, h); 
                              mC.WaitFor(10, h);        
-                             mB.Stop('brake', h);
-                             mC.Stop('brake', h);
+                             StopMotor('all', 'off', h);
+                             
+                             NXC_ResetErrorCorrection(MOTOR_B, h);
+                             NXC_ResetErrorCorrection(MOTOR_C, h);
                             %------------------------------------------------------
                         case 2
                             % mantem direção atual
@@ -193,28 +201,32 @@ function [] = executa_rota()
                             disp('altera direção atual norte->sul para leste->oeste');
                             dir=2; %atualiza direção
                             %------------------------------------------------------
-                             mC=NXTMotor('C', 'Power',-velo_gira, 'TachoLimit',angulo);
-                             mB=NXTMotor('B', 'Power',velo_gira, 'TachoLimit',angulo);
+                             mC=NXTMotor('C', 'Power',velo_gira, 'TachoLimit',angulo);
+                             mB=NXTMotor('B', 'Power',-velo_gira, 'TachoLimit',angulo+100);
                              mB.SendToNXT(h);
                              mC.SendToNXT(h);
                              mB.WaitFor(10, h); 
                              mC.WaitFor(10, h);        
-                             mB.Stop('brake', h);
-                             mC.Stop('brake', h);
+                             StopMotor('all', 'off', h);
+                             
+                             NXC_ResetErrorCorrection(MOTOR_B, h);
+                             NXC_ResetErrorCorrection(MOTOR_C, h);
                             %------------------------------------------------------
                         case 4
                             % gira 90º para o leste
                             disp('altera direção atual sul->norte para leste->oeste');
                             dir=2; %atualiza direção
                             %------------------------------------------------------
-                             mC=NXTMotor('C', 'Power',velo_gira, 'TachoLimit',angulo);
-                             mB=NXTMotor('B', 'Power',-velo_gira, 'TachoLimit',angulo);
+                             mC=NXTMotor('C', 'Power',-velo_gira, 'TachoLimit',angulo);
+                             mB=NXTMotor('B', 'Power',velo_gira, 'TachoLimit',angulo);
                              mB.SendToNXT(h);
                              mC.SendToNXT(h);
                              mB.WaitFor(10, h); 
                              mC.WaitFor(10, h);        
-                             mB.Stop('brake', h);
-                             mC.Stop('brake', h);
+                             StopMotor('all', 'off', h);
+                             
+                             NXC_ResetErrorCorrection(MOTOR_B, h);
+                             NXC_ResetErrorCorrection(MOTOR_C, h);
                             %------------------------------------------------------
                              
                     end
@@ -282,28 +294,32 @@ function [] = executa_rota()
                             disp('altera direção atual oeste->leste para norte->sul');
                             dir=3; %atualiza direção atual
                             %------------------------------------------------------
-                             mC=NXTMotor('C', 'Power',-velo_gira, 'TachoLimit',angulo);
-                             mB=NXTMotor('B', 'Power',velo_gira, 'TachoLimit',angulo);
+                             mC=NXTMotor('C', 'Power',velo_gira, 'TachoLimit',angulo);
+                             mB=NXTMotor('B', 'Power',-velo_gira, 'TachoLimit',angulo+100);
                              mB.SendToNXT(h);
                              mC.SendToNXT(h);
                              mB.WaitFor(10, h); 
                              mC.WaitFor(10, h);        
-                             mB.Stop('brake', h);
-                             mC.Stop('brake', h);
+                             StopMotor('all', 'off', h);
+                             
+                             NXC_ResetErrorCorrection(MOTOR_B, h);
+                             NXC_ResetErrorCorrection(MOTOR_C, h);
                             %------------------------------------------------------
                         case 2
                             % gira robo 90º para o sul
                             disp('altera direção atual leste->oeste para norte->sul');
                             dir=3; %atualiza direção atual
                             %------------------------------------------------------
-                             mC=NXTMotor('C', 'Power',velo_gira, 'TachoLimit',angulo);
-                             mB=NXTMotor('B', 'Power',-velo_gira, 'TachoLimit',angulo);
+                             mC=NXTMotor('C', 'Power',-velo_gira, 'TachoLimit',angulo);
+                             mB=NXTMotor('B', 'Power',velo_gira, 'TachoLimit',angulo);
                              mB.SendToNXT(h);
                              mC.SendToNXT(h);
                              mB.WaitFor(10, h); 
                              mC.WaitFor(10, h);        
-                             mB.Stop('brake', h);
-                             mC.Stop('brake', h);
+                             StopMotor('all', 'off', h);
+                             
+                             NXC_ResetErrorCorrection(MOTOR_B, h);
+                             NXC_ResetErrorCorrection(MOTOR_C, h);
                             %------------------------------------------------------
                         case 3
                             % mantem direção atual 
@@ -319,8 +335,10 @@ function [] = executa_rota()
                              mC.SendToNXT(h);
                              mB.WaitFor(10, h); 
                              mC.WaitFor(10, h);        
-                             mB.Stop('brake', h);
-                             mC.Stop('brake', h);
+                             StopMotor('all', 'off', h);
+                             
+                             NXC_ResetErrorCorrection(MOTOR_B, h);
+                             NXC_ResetErrorCorrection(MOTOR_C, h);
                             %------------------------------------------------------
                     end
                     disp('anda para frente')
@@ -386,13 +404,15 @@ function [] = executa_rota()
 
                             %------------------------------------------------------
                              mC=NXTMotor('C', 'Power',velo_gira, 'TachoLimit',angulo);
-                             mB=NXTMotor('B', 'Power',-velo_gira, 'TachoLimit',angulo);
+                             mB=NXTMotor('B', 'Power',-velo_gira, 'TachoLimit',angulo+100);
                              mB.SendToNXT(h);
                              mC.SendToNXT(h);
                              mB.WaitFor(10, h); 
                              mC.WaitFor(10, h);        
-                             mB.Stop('brake', h);
-                             mC.Stop('brake', h);
+                             StopMotor('all', 'off', h);
+                             
+                             NXC_ResetErrorCorrection(MOTOR_B, h);
+                             NXC_ResetErrorCorrection(MOTOR_C, h);
                             %------------------------------------------------------
 
                          case 2
@@ -401,14 +421,16 @@ function [] = executa_rota()
                             dir=4; %atualiza a posição atual
 
                             %------------------------------------------------------
-                             mC=NXTMotor('C', 'Power',-velo_gira, 'TachoLimit',angulo);
-                             mB=NXTMotor('B', 'Power',velo_gira, 'TachoLimit',angulo);
+                             mC=NXTMotor('C', 'Power',velo_gira, 'TachoLimit',angulo);
+                             mB=NXTMotor('B', 'Power',-velo_gira, 'TachoLimit',angulo+100);
                              mB.SendToNXT(h);
                              mC.SendToNXT(h);
                              mB.WaitFor(10, h); 
                              mC.WaitFor(10, h);        
-                             mB.Stop('brake', h);
-                             mC.Stop('brake', h);
+                             StopMotor('all', 'off', h);
+                             
+                             NXC_ResetErrorCorrection(MOTOR_B, h);
+                             NXC_ResetErrorCorrection(MOTOR_C, h);
                             %------------------------------------------------------
                         case 3
                             % gira o robo 180º 
@@ -422,8 +444,10 @@ function [] = executa_rota()
                              mC.SendToNXT(h);
                              mB.WaitFor(10, h); 
                              mC.WaitFor(10, h);        
-                             mB.Stop('brake', h);
-                             mC.Stop('brake', h);
+                             StopMotor('all', 'off', h);
+                             
+                             NXC_ResetErrorCorrection(MOTOR_B, h);
+                             NXC_ResetErrorCorrection(MOTOR_C, h);
                             %------------------------------------------------------
                         case 4
                             % mantem direção atual   
